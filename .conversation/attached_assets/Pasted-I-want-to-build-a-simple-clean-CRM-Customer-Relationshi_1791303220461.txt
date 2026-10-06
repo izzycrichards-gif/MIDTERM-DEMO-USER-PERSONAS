@@ -1,0 +1,180 @@
+I want to build a simple, clean CRM (Customer Relationship Management) web app designed for freelancers, artists, creative entrepreneurs, small business owners, and anyone who needs to keep track of professional contacts and relationships.The core purpose of the app is to let users easily add and organize contacts, track the status of each relationship, and receive reminders when it’s time to follow up.
+CORE FEATURES:
+
+1. CONTACTS
+Users should be able to create individual contacts with fields including:
+- First name
+- Last name
+- Company/organization
+- Job title
+- Email
+- Phone number
+- Website
+- Social media links
+- Notes
+- Tags
+- Date added
+- Last contacted date
+- Next follow-up date
+
+Users should be able to edit or delete contacts at any time.
+
+2. RELATIONSHIP STATUS
+Each contact should have a relationship/lead status that the user can select from a dropdown:
+- New Lead
+- Warm Lead
+- Active Contact
+- Client
+- Past Client
+- Networking Contact
+- Follow-Up Needed
+- Not a Fit
+
+Make these statuses easy to change from the contact profile and contact list.
+
+3. FOLLOW-UP REMINDERS
+The main feature of the app should be follow-up tracking.
+
+When adding or editing a contact, users should be able to set:
+- A specific date to follow up
+- An optional time
+- A recurring follow-up schedule (for example, every 30 days, 60 days, 90 days, etc.)
+
+The app should notify the user when a follow-up is due.
+
+There should be a dashboard section showing:
+- Follow-ups due today
+- Overdue follow-ups
+- Upcoming follow-ups
+- Recently contacted people
+
+Users should be able to mark a follow-up as completed. When they do, they should have the option to automatically set the next follow-up date.
+
+4. CONTACT HISTORY
+Each contact should have a simple interaction history/timeline.
+
+Users should be able to record interactions such as:
+- Email
+- Phone call
+- Text
+- Meeting
+- Social media interaction
+- Other
+
+Each interaction should include:
+- Date
+- Interaction type
+- Notes
+
+This allows users to see the history of their relationship with that person.
+
+5. DASHBOARD
+Create a simple dashboard as the home screen.
+
+The dashboard should show:
+- Total contacts
+- New leads
+- Warm leads
+- Active clients
+- Follow-ups due today
+- Overdue follow-ups
+- Upcoming follow-ups
+
+Also include a prominent "Add Contact" button.
+
+The dashboard should prioritize follow-ups so the user immediately knows who they need to contact.
+
+6. CONTACT LIST
+Create a searchable and filterable contact list.
+
+Users should be able to:
+- Search by name, company, email, or phone number
+- Filter by relationship status
+- Filter by tags
+- Filter by follow-up date
+- Sort by recently contacted
+- Sort by next follow-up
+- Sort alphabetically
+
+Each contact should appear as a clean card or row showing their name, company, status, last contacted date, and next follow-up date.
+
+7. CONTACT PROFILE
+Clicking a contact should open a dedicated contact profile page.
+
+The profile should clearly display:
+- Contact information
+- Relationship status
+- Tags
+- Notes
+- Last contacted date
+- Next follow-up date
+- Interaction history
+- Edit contact button
+- Add interaction button
+- Mark follow-up complete button
+
+8. NOTIFICATIONS
+Build a notification/reminder system that alerts the user when a follow-up is due.
+
+Start with in-app notifications. Structure the application so email or push notifications can be added later.
+
+9. TAGS
+Users should be able to create custom tags such as:
+- Music
+- Industry
+- Potential Client
+- Collaborator
+- Networking
+- Press
+- Management
+- Important
+
+Contacts can have multiple tags.
+
+10. DESIGN
+The app should feel modern, minimal, professional, and easy to use.
+
+Prioritize simplicity over having too many features.
+
+Use a clean dashboard, intuitive navigation, clear typography, and plenty of whitespace.
+
+The primary navigation should include:
+- Dashboard
+- Contacts
+- Follow-Ups
+- Settings
+
+Include a persistent "Add Contact" button that is easy to access.
+
+11. DATABASE
+Create a proper database structure so user data persists between sessions.
+
+At minimum, the database should have:
+- Users
+- Contacts
+- Interactions
+- Tags
+- Follow-ups
+- Notifications
+
+Contacts and all related information should be associated with the logged-in user.
+
+12. AUTHENTICATION
+Users should have individual accounts and should only be able to access their own contacts and data.
+
+Include:
+- Sign up
+- Log in
+- Log out
+- Password reset
+
+13. MVP PRIORITY
+Build the first version around the core workflow:
+
+Sign up → Add contact → Select relationship status → Set follow-up date → Receive reminder → Contact person → Log interaction → Mark follow-up complete → Set next follow-up.
+
+Do not overcomplicate the first version. Make this workflow extremely easy and intuitive.
+
+Before building, structure the database and application architecture so additional features can be added later without rebuilding the core system.
+
+

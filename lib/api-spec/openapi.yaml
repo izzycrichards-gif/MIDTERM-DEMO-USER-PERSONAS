@@ -3,13 +3,14 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Relationship CRM API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
-    description: Health operations
+  - name: crm
+    description: Contacts, follow-ups, interactions, tags, and notifications
 paths:
   /healthz:
     get:
@@ -24,6 +25,247 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /dashboard:
+    get:
+      operationId: getDashboard
+      tags: [crm]
+      summary: Get CRM overview
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dashboard"
+  /contacts:
+    get:
+      operationId: listContacts
+      tags: [crm]
+      summary: Search, filter, and sort contacts
+      parameters:
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: status
+          schema: { $ref: "#/components/schemas/RelationshipStatus" }
+        - in: query
+          name: tagId
+          schema: { type: integer }
+        - in: query
+          name: followUp
+          schema: { $ref: "#/components/schemas/FollowUpFilter" }
+        - in: query
+          name: sort
+          schema: { $ref: "#/components/schemas/ContactSort" }
+      responses:
+        "200":
+          description: Matching contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Contact" }
+    post:
+      operationId: createContact
+      tags: [crm]
+      summary: Add a contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ContactInput" }
+      responses:
+        "201":
+          description: Contact created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Contact" }
+        "400": { description: Invalid input }
+  /contacts/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: integer }
+    get:
+      operationId: getContact
+      tags: [crm]
+      summary: Get a contact and its relationship history
+      responses:
+        "200":
+          description: Contact profile
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ContactDetail" }
+        "404": { description: Contact not found }
+    patch:
+      operationId: updateContact
+      tags: [crm]
+      summary: Update a contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ContactUpdate" }
+      responses:
+        "200":
+          description: Contact updated
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Contact" }
+        "404": { description: Contact not found }
+    delete:
+      operationId: deleteContact
+      tags: [crm]
+      summary: Delete a contact
+      responses:
+        "204": { description: Contact deleted }
+        "404": { description: Contact not found }
+  /contacts/{id}/interactions:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: integer }
+    get:
+      operationId: listInteractions
+      tags: [crm]
+      summary: List a contact's interactions
+      responses:
+        "200":
+          description: Interaction timeline
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Interaction" }
+    post:
+      operationId: createInteraction
+      tags: [crm]
+      summary: Log an interaction with a contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/InteractionInput" }
+      responses:
+        "201":
+          description: Interaction recorded
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Interaction" }
+        "404": { description: Contact not found }
+  /tags:
+    get:
+      operationId: listTags
+      tags: [crm]
+      summary: List the user's tags
+      responses:
+        "200":
+          description: Tags
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Tag" }
+    post:
+      operationId: createTag
+      tags: [crm]
+      summary: Create a custom tag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/TagInput" }
+      responses:
+        "201":
+          description: Tag created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Tag" }
+  /tags/{id}:
+    delete:
+      operationId: deleteTag
+      tags: [crm]
+      summary: Delete a tag
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "204": { description: Tag deleted }
+        "404": { description: Tag not found }
+  /follow-ups:
+    get:
+      operationId: listFollowUps
+      tags: [crm]
+      summary: List follow-ups
+      parameters:
+        - in: query
+          name: filter
+          schema: { $ref: "#/components/schemas/FollowUpFilter" }
+      responses:
+        "200":
+          description: Follow-ups with their contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/FollowUpWithContact" }
+  /follow-ups/{id}/complete:
+    post:
+      operationId: completeFollowUp
+      tags: [crm]
+      summary: Complete a follow-up and optionally schedule another
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/FollowUpCompletionInput" }
+      responses:
+        "200":
+          description: Follow-up completed
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/FollowUpCompletion" }
+        "404": { description: Follow-up not found }
+  /notifications:
+    get:
+      operationId: listNotifications
+      tags: [crm]
+      summary: List in-app reminders
+      responses:
+        "200":
+          description: In-app notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Notification" }
+  /notifications/{id}/read:
+    patch:
+      operationId: markNotificationRead
+      tags: [crm]
+      summary: Mark a notification as read
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Notification updated
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Notification" }
+        "404": { description: Notification not found }
 components:
   schemas:
     HealthStatus:
@@ -33,4 +275,188 @@ components:
           type: string
       required:
         - status
+    RelationshipStatus:
+      type: string
+      enum:
+        - New Lead
+        - Warm Lead
+        - Active Contact
+        - Client
+        - Past Client
+        - Networking Contact
+        - Follow-Up Needed
+        - Not a Fit
+    InteractionType:
+      type: string
+      enum: [Email, Phone call, Text, Meeting, Social media, Other]
+    FollowUpFilter:
+      type: string
+      enum: [overdue, today, upcoming, completed, all]
+    ContactSort:
+      type: string
+      enum: [recently-contacted, next-follow-up, alphabetical]
+    Tag:
+      type: object
+      required: [id, name, contactCount]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        contactCount: { type: integer }
+    TagInput:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 40 }
+    FollowUp:
+      type: object
+      required: [id, contactId, dueDate, dueTime, recurrenceDays, status, createdAt]
+      properties:
+        id: { type: integer }
+        contactId: { type: integer }
+        dueDate: { type: string, format: date }
+        dueTime: { type: ["string", "null"] }
+        recurrenceDays: { type: ["integer", "null"] }
+        status: { type: string, enum: [pending, completed] }
+        completedAt: { type: ["string", "null"], format: date-time }
+        createdAt: { type: string, format: date-time }
+    Contact:
+      type: object
+      required:
+        [id, firstName, lastName, company, jobTitle, email, phone, website, socialLinks, notes, status, tags, dateAdded, lastContactedAt, followUp]
+      properties:
+        id: { type: integer }
+        firstName: { type: string }
+        lastName: { type: string }
+        company: { type: ["string", "null"] }
+        jobTitle: { type: ["string", "null"] }
+        email: { type: ["string", "null"] }
+        phone: { type: ["string", "null"] }
+        website: { type: ["string", "null"] }
+        socialLinks: { type: array, items: { type: string } }
+        notes: { type: string }
+        status: { $ref: "#/components/schemas/RelationshipStatus" }
+        tags:
+          type: array
+          items: { $ref: "#/components/schemas/Tag" }
+        dateAdded: { type: string, format: date-time }
+        lastContactedAt: { type: ["string", "null"], format: date-time }
+        followUp: { oneOf: [{ $ref: "#/components/schemas/FollowUp" }, { type: "null" }] }
+    ContactInput:
+      type: object
+      required: [firstName, lastName, status]
+      properties:
+        firstName: { type: string, minLength: 1, maxLength: 100 }
+        lastName: { type: string, minLength: 1, maxLength: 100 }
+        company: { type: ["string", "null"] }
+        jobTitle: { type: ["string", "null"] }
+        email: { type: ["string", "null"], format: email }
+        phone: { type: ["string", "null"] }
+        website: { type: ["string", "null"], format: uri }
+        socialLinks: { type: array, items: { type: string } }
+        notes: { type: string, default: "" }
+        status: { $ref: "#/components/schemas/RelationshipStatus" }
+        tagIds: { type: array, items: { type: integer } }
+        nextFollowUpDate: { type: ["string", "null"], format: date }
+        nextFollowUpTime: { type: ["string", "null"] }
+        recurrenceDays: { type: ["integer", "null"], minimum: 1 }
+    ContactUpdate:
+      type: object
+      properties:
+        firstName: { type: string, minLength: 1, maxLength: 100 }
+        lastName: { type: string, minLength: 1, maxLength: 100 }
+        company: { type: ["string", "null"] }
+        jobTitle: { type: ["string", "null"] }
+        email: { type: ["string", "null"], format: email }
+        phone: { type: ["string", "null"] }
+        website: { type: ["string", "null"], format: uri }
+        socialLinks: { type: array, items: { type: string } }
+        notes: { type: string }
+        status: { $ref: "#/components/schemas/RelationshipStatus" }
+        tagIds: { type: array, items: { type: integer } }
+        nextFollowUpDate: { type: ["string", "null"], format: date }
+        nextFollowUpTime: { type: ["string", "null"] }
+        recurrenceDays: { type: ["integer", "null"], minimum: 1 }
+    ContactDetail:
+      allOf:
+        - $ref: "#/components/schemas/Contact"
+        - type: object
+          required: [interactions]
+          properties:
+            interactions:
+              type: array
+              items: { $ref: "#/components/schemas/Interaction" }
+    Interaction:
+      type: object
+      required: [id, contactId, type, occurredAt, notes]
+      properties:
+        id: { type: integer }
+        contactId: { type: integer }
+        type: { $ref: "#/components/schemas/InteractionType" }
+        occurredAt: { type: string, format: date-time }
+        notes: { type: string }
+    InteractionInput:
+      type: object
+      required: [type, occurredAt]
+      properties:
+        type: { $ref: "#/components/schemas/InteractionType" }
+        occurredAt: { type: string, format: date-time }
+        notes: { type: string, default: "" }
+    FollowUpWithContact:
+      type: object
+      required: [id, contactId, dueDate, dueTime, recurrenceDays, status, createdAt, contactName, company]
+      properties:
+        id: { type: integer }
+        contactId: { type: integer }
+        dueDate: { type: string, format: date }
+        dueTime: { type: ["string", "null"] }
+        recurrenceDays: { type: ["integer", "null"] }
+        status: { type: string, enum: [pending, completed] }
+        completedAt: { type: ["string", "null"], format: date-time }
+        createdAt: { type: string, format: date-time }
+        contactName: { type: string }
+        company: { type: ["string", "null"] }
+    FollowUpCompletionInput:
+      type: object
+      properties:
+        nextFollowUpDate: { type: ["string", "null"], format: date }
+        nextFollowUpTime: { type: ["string", "null"] }
+        recurrenceDays: { type: ["integer", "null"], minimum: 1 }
+    FollowUpCompletion:
+      type: object
+      required: [completed, nextFollowUp]
+      properties:
+        completed: { $ref: "#/components/schemas/FollowUp" }
+        nextFollowUp: { oneOf: [{ $ref: "#/components/schemas/FollowUp" }, { type: "null" }] }
+    Notification:
+      type: object
+      required: [id, followUpId, contactId, title, message, dueDate, readAt, createdAt]
+      properties:
+        id: { type: integer }
+        followUpId: { type: integer }
+        contactId: { type: integer }
+        title: { type: string }
+        message: { type: string }
+        dueDate: { type: string, format: date }
+        readAt: { type: ["string", "null"], format: date-time }
+        createdAt: { type: string, format: date-time }
+    Dashboard:
+      type: object
+      required: [totalContacts, newLeads, warmLeads, activeClients, dueToday, overdue, upcoming, recentlyContacted]
+      properties:
+        totalContacts: { type: integer }
+        newLeads: { type: integer }
+        warmLeads: { type: integer }
+        activeClients: { type: integer }
+        dueToday:
+          type: array
+          items: { $ref: "#/components/schemas/FollowUpWithContact" }
+        overdue:
+          type: array
+          items: { $ref: "#/components/schemas/FollowUpWithContact" }
+        upcoming:
+          type: array
+          items: { $ref: "#/components/schemas/FollowUpWithContact" }
+        recentlyContacted:
+          type: array
+          items: { $ref: "#/components/schemas/Contact" }
 
