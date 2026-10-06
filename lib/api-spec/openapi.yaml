@@ -12,6 +12,34 @@ tags:
   - name: crm
     description: Contacts, follow-ups, interactions, tags, and notifications
 paths:
+  /reminder-preferences:
+    get:
+      operationId: getReminderPreferences
+      tags: [crm]
+      summary: Get email reminder preferences and delivery state
+      responses:
+        "200":
+          description: Account reminder preferences
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ReminderPreferences" }
+    put:
+      operationId: updateReminderPreferences
+      tags: [crm]
+      summary: Save opt-in email reminder preferences
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ReminderPreferenceUpdate" }
+      responses:
+        "200":
+          description: Saved reminder preferences
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ReminderPreferences" }
+        "400": { description: Invalid timezone or unverified email }
+        "503": { description: Email delivery is not configured }
   /healthz:
     get:
       operationId: healthCheck
@@ -268,6 +296,32 @@ paths:
         "404": { description: Notification not found }
 components:
   schemas:
+    ReminderPreferences:
+      type: object
+      required: [emailEnabled, timezone, email, deliveryAvailable, recentDeliveries]
+      properties:
+        emailEnabled: { type: boolean }
+        timezone: { type: string }
+        email: { type: [string, "null"] }
+        deliveryAvailable: { type: boolean }
+        recentDeliveries:
+          type: array
+          items:
+            type: object
+            required: [id, followUpId, state, attempts, sentAt, lastError]
+            properties:
+              id: { type: integer }
+              followUpId: { type: integer }
+              state: { type: string, enum: [pending, sending, retry, sent, failed, uncertain, cancelled] }
+              attempts: { type: integer }
+              sentAt: { type: [string, "null"], format: date-time }
+              lastError: { type: [string, "null"] }
+    ReminderPreferenceUpdate:
+      type: object
+      required: [emailEnabled, timezone]
+      properties:
+        emailEnabled: { type: boolean }
+        timezone: { type: string, minLength: 1, maxLength: 100 }
     HealthStatus:
       type: object
       properties:

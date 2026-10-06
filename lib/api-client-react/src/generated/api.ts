@@ -34,6 +34,8 @@ import type {
   ListContactsParams,
   ListFollowUpsParams,
   Notification,
+  ReminderPreferenceUpdate,
+  ReminderPreferences,
   Tag,
   TagInput
 } from './api.schemas';
@@ -64,6 +66,171 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   }
   return result;
 };
+
+export const getGetReminderPreferencesUrl = () => {
+
+
+
+
+  return `/api/reminder-preferences`
+}
+
+/**
+ * @summary Get email reminder preferences and delivery state
+ */
+export const getReminderPreferences = async ( options?: Parameters<typeof customFetch>[1]): Promise<ReminderPreferences> => {
+
+  return customFetch<ReminderPreferences>(getGetReminderPreferencesUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetReminderPreferencesQueryKey = () => {
+    return [
+    `/api/reminder-preferences`
+    ] as const;
+    }
+
+
+export const getGetReminderPreferencesQueryOptions = <TData = Awaited<ReturnType<typeof getReminderPreferences>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getReminderPreferences>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetReminderPreferencesQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getReminderPreferences>>> = ({ signal }) => getReminderPreferences({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getReminderPreferences>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetReminderPreferencesQueryResult = NonNullable<Awaited<ReturnType<typeof getReminderPreferences>>>
+export type GetReminderPreferencesQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get email reminder preferences and delivery state
+ */
+
+export function useGetReminderPreferences<TData = Awaited<ReturnType<typeof getReminderPreferences>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getReminderPreferences>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetReminderPreferencesQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getUpdateReminderPreferencesUrl = () => {
+
+
+
+
+  return `/api/reminder-preferences`
+}
+
+/**
+ * @summary Save opt-in email reminder preferences
+ */
+export const updateReminderPreferences = async (reminderPreferenceUpdate: ReminderPreferenceUpdate, options?: Parameters<typeof customFetch>[1]): Promise<ReminderPreferences> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<ReminderPreferences>(getUpdateReminderPreferencesUrl(),
+  {
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(reminderPreferenceUpdate)
+  }
+);}
+
+
+
+
+
+export const getUpdateReminderPreferencesMutationKey = () => ['updateReminderPreferences'] as const;
+
+export const getUpdateReminderPreferencesMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateReminderPreferences>>, TError,UpdateReminderPreferencesMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateReminderPreferences>>, TError,UpdateReminderPreferencesMutationVariables, TContext> => {
+
+const mutationKey = getUpdateReminderPreferencesMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateReminderPreferences>>, UpdateReminderPreferencesMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  updateReminderPreferences(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateReminderPreferencesMutationResult = NonNullable<Awaited<ReturnType<typeof updateReminderPreferences>>>
+    export type UpdateReminderPreferencesMutationBody = BodyType<ReminderPreferenceUpdate>
+    export type UpdateReminderPreferencesMutationError = ErrorType<void>
+    export type UpdateReminderPreferencesMutationVariables = {data: BodyType<ReminderPreferenceUpdate>}
+
+    /**
+ * @summary Save opt-in email reminder preferences
+ */
+export const useUpdateReminderPreferences = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateReminderPreferences>>, TError,UpdateReminderPreferencesMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof updateReminderPreferences>>,
+        TError,
+        UpdateReminderPreferencesMutationVariables,
+        TContext
+      > => {
+      return useMutation(getUpdateReminderPreferencesMutationOptions(options));
+    }
 
 export const getHealthCheckUrl = () => {
 

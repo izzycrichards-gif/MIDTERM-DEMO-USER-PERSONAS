@@ -13,6 +13,7 @@ import { ErrorState, PageHeader } from "@/components/states";
 import { useToast } from "@/hooks/use-toast";
 import { useRefresh } from "@/hooks/use-refresh";
 import { errMsg } from "@/lib/crm";
+import { ReminderSettings } from "@/components/reminder-settings";
 
 export default function Settings() {
   const { user } = useUser();
@@ -51,6 +52,8 @@ export default function Settings() {
         </div>
         <p className="mt-4 text-xs text-muted-foreground">Password resets are handled on the sign-in screen with "Forgot password".</p>
       </section>
+
+      <ReminderSettings />
 
       <section className="rise rise-2">
         <h2 className="font-display text-2xl">Tags</h2>

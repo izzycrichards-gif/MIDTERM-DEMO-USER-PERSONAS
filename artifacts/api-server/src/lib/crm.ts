@@ -1,5 +1,6 @@
 import { and, eq, inArray } from "drizzle-orm";
 import type { Request, Response } from "express";
+import { zonedClock } from "./reminder-policy";
 import {
   db, contactsTable, tagsTable, contactTagsTable, followUpsTable,
   notificationsTable, type FollowUpRow,
@@ -19,12 +20,7 @@ export function localClock(req: Request) {
   let timeZone = req.get("X-Timezone") || "UTC";
   try { new Intl.DateTimeFormat("en-US", { timeZone }).format(); }
   catch { timeZone = "UTC"; }
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone, year: "numeric", month: "2-digit", day: "2-digit",
-    hour: "2-digit", minute: "2-digit", hourCycle: "h23",
-  }).formatToParts(new Date());
-  const get = (type: string) => parts.find((p) => p.type === type)?.value;
-  return { today: `${get("year")}-${get("month")}-${get("day")}`, time: `${get("hour")}:${get("minute")}` };
+  return zonedClock(new Date(), timeZone);
 }
 
 export function validateSchedule(body: Record<string, unknown>) {
@@ -77,7 +73,7 @@ export async function getContacts(userId: string) {
 
 export function publicFollowUp(row: FollowUpRow | undefined) {
   if (!row) return null;
-  const { userId: _owner, ...followUp } = row;
+  const { userId: _owner, scheduleRevision: _revision, ...followUp } = row;
   return followUp;
 }
 

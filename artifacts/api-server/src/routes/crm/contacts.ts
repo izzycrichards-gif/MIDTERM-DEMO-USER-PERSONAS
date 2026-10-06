@@ -1,5 +1,6 @@
 import { Router, type IRouter } from "express";
-import { and, desc, eq, inArray } from "drizzle-orm";
+import { scheduleChanged } from "../../lib/reminder-policy";
+import { and, desc, eq, inArray, sql } from "drizzle-orm";
 import {
   db, contactsTable, tagsTable, contactTagsTable, followUpsTable,
   notificationsTable, interactionsTable,
@@ -98,6 +99,8 @@ router.patch("/contacts/:id", async (req, res): Promise<void> => {
         if (nextFollowUpDate === null) await tx.delete(followUpsTable).where(eq(followUpsTable.id, pending.id));
         else {
           await tx.update(followUpsTable).set({
+            ...(scheduleChanged(pending.dueDate, pending.dueTime, nextFollowUpDate?.toISOString().slice(0, 10), nextFollowUpTime)
+              ? { scheduleRevision: sql`${followUpsTable.scheduleRevision} + 1` } : {}),
             ...(nextFollowUpDate ? { dueDate: nextFollowUpDate.toISOString().slice(0, 10) } : {}),
             ...(nextFollowUpTime !== undefined ? { dueTime: nextFollowUpTime } : {}),
             ...(recurrenceDays !== undefined ? { recurrenceDays } : {}),

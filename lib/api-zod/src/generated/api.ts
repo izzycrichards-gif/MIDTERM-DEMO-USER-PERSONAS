@@ -9,6 +9,53 @@ import * as zod from 'zod';
 
 
 /**
+ * @summary Get email reminder preferences and delivery state
+ */
+export const GetReminderPreferencesResponse = zod.object({
+  "emailEnabled": zod.boolean(),
+  "timezone": zod.string(),
+  "email": zod.string().nullable(),
+  "deliveryAvailable": zod.boolean(),
+  "recentDeliveries": zod.array(zod.object({
+  "id": zod.number().int(),
+  "followUpId": zod.number().int(),
+  "state": zod.enum(['pending', 'sending', 'retry', 'sent', 'failed', 'uncertain', 'cancelled']),
+  "attempts": zod.number().int(),
+  "sentAt": zod.coerce.date().nullable(),
+  "lastError": zod.string().nullable()
+}))
+})
+
+
+/**
+ * @summary Save opt-in email reminder preferences
+ */
+export const updateReminderPreferencesBodyTimezoneMax = 100;
+
+
+
+export const UpdateReminderPreferencesBody = zod.object({
+  "emailEnabled": zod.boolean(),
+  "timezone": zod.string().min(1).max(updateReminderPreferencesBodyTimezoneMax)
+})
+
+export const UpdateReminderPreferencesResponse = zod.object({
+  "emailEnabled": zod.boolean(),
+  "timezone": zod.string(),
+  "email": zod.string().nullable(),
+  "deliveryAvailable": zod.boolean(),
+  "recentDeliveries": zod.array(zod.object({
+  "id": zod.number().int(),
+  "followUpId": zod.number().int(),
+  "state": zod.enum(['pending', 'sending', 'retry', 'sent', 'failed', 'uncertain', 'cancelled']),
+  "attempts": zod.number().int(),
+  "sentAt": zod.coerce.date().nullable(),
+  "lastError": zod.string().nullable()
+}))
+})
+
+
+/**
  * Returns server health status
  * @summary Health check
  */

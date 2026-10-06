@@ -32,7 +32,8 @@ A focused CRM for freelancers, artists, creative entrepreneurs, and small busine
 - Clerk owns authentication; never implement local passwords or browser bearer-token handling.
 - Data belongs to the authenticated account. Ownership must be checked for all reads, writes, and related tags.
 - Follow-up dates are calendar days; optional times are interpreted in the user's browser timezone.
-- In-app reminders are checked while the app is open. Email and push delivery are future extensions, not simulated features.
+- In-app reminders are checked while open and by the API's background worker. Email is opt-in and uses a real Resend sender only when configured; push is not implemented.
+- Email scheduling uses the saved account timezone. Run the API on an always-running deployment for closed-app delivery. See `artifacts/api-server/REMINDERS.md` for sender setup, retry safety, and verification.
 
 ## Product
 
@@ -56,3 +57,4 @@ A focused CRM for freelancers, artists, creative entrepreneurs, and small busine
 ## Pointers
 
 - See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details
+

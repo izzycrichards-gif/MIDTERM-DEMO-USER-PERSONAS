@@ -5,6 +5,48 @@
  * Relationship CRM API
  * OpenAPI spec version: 0.1.0
  */
+export type ReminderPreferencesRecentDeliveriesItemState = typeof ReminderPreferencesRecentDeliveriesItemState[keyof typeof ReminderPreferencesRecentDeliveriesItemState];
+
+
+export const ReminderPreferencesRecentDeliveriesItemState = {
+  pending: 'pending',
+  sending: 'sending',
+  retry: 'retry',
+  sent: 'sent',
+  failed: 'failed',
+  uncertain: 'uncertain',
+  cancelled: 'cancelled',
+} as const;
+
+export type ReminderPreferencesRecentDeliveriesItem = {
+  id: number;
+  followUpId: number;
+  state: ReminderPreferencesRecentDeliveriesItemState;
+  attempts: number;
+  /** @nullable */
+  sentAt: string | null;
+  /** @nullable */
+  lastError: string | null;
+};
+
+export interface ReminderPreferences {
+  emailEnabled: boolean;
+  timezone: string;
+  /** @nullable */
+  email: string | null;
+  deliveryAvailable: boolean;
+  recentDeliveries: ReminderPreferencesRecentDeliveriesItem[];
+}
+
+export interface ReminderPreferenceUpdate {
+  emailEnabled: boolean;
+  /**
+     * @minLength 1
+     * @maxLength 100
+     */
+  timezone: string;
+}
+
 export interface HealthStatus {
   status: string;
 }

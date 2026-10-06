@@ -8,7 +8,10 @@ export const crmAuth: RequestHandler = async (req, res, next) => {
     res.status(401).json({ error: "Sign in to access your CRM." });
     return;
   }
-  await db.insert(usersTable).values({ id: userId }).onConflictDoNothing();
+  let reminderTimezone = req.get("X-Timezone") || "UTC";
+  try { new Intl.DateTimeFormat("en-US", { timeZone: reminderTimezone }).format(); }
+  catch { reminderTimezone = "UTC"; }
+  await db.insert(usersTable).values({ id: userId, reminderTimezone }).onConflictDoNothing();
   res.locals.userId = userId;
   next();
 };

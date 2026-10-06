@@ -23,3 +23,4 @@ export * from "./tags";
 export * from "./interactions";
 export * from "./follow-ups";
 export * from "./notifications";
+export * from "./reminder-deliveries";
