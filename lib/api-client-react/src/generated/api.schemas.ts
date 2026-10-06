@@ -141,6 +141,8 @@ export interface ContactInput {
   status: RelationshipStatus;
   tagIds?: number[];
   /** @nullable */
+  lastContactedAt?: string | null;
+  /** @nullable */
   nextFollowUpDate?: string | null;
   /** @nullable */
   nextFollowUpTime?: string | null;
@@ -176,6 +178,8 @@ export interface ContactUpdate {
   notes?: string;
   status?: RelationshipStatus;
   tagIds?: number[];
+  /** @nullable */
+  lastContactedAt?: string | null;
   /** @nullable */
   nextFollowUpDate?: string | null;
   /** @nullable */

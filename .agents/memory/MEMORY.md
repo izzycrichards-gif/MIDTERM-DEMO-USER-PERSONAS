@@ -1,0 +1,1 @@
+- [Vite runtime caches](vite-runtime-caches.md) — installed package versions can be correct while optimized browser dependencies still contain an older runtime.

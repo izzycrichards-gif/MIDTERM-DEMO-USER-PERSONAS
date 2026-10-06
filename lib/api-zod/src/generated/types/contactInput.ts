@@ -33,6 +33,8 @@ export interface ContactInput {
   status: RelationshipStatus;
   tagIds?: number[];
   /** @nullable */
+  lastContactedAt?: Date | null;
+  /** @nullable */
   nextFollowUpDate?: Date | null;
   /** @nullable */
   nextFollowUpTime?: string | null;

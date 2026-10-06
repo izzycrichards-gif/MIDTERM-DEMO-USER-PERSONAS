@@ -336,6 +336,9 @@ export async function customFetch<T = unknown>(
   }
 
   const headers = mergeHeaders(isRequest(input) ? input.headers : undefined, headersInit);
+  if (typeof window !== "undefined") {
+    headers.set("X-Timezone", Intl.DateTimeFormat().resolvedOptions().timeZone);
+  }
 
   if (
     typeof init.body === "string" &&

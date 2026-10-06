@@ -1,6 +1,6 @@
-# [Project name]
+# Full Circle
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A focused CRM for freelancers, artists, creative entrepreneurs, and small businesses to organize contacts and maintain relationships through follow-ups.
 
 ## Run & Operate
 
@@ -22,23 +22,36 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/relationship-crm` — React web app, branded authentication, dashboard, contacts, follow-ups, and settings.
+- `artifacts/api-server/src/routes/crm` — authenticated CRM API routes.
+- `lib/api-spec/openapi.yaml` — source of truth for API contracts.
+- `lib/db/src/schema` — Drizzle database models.
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Clerk owns authentication; never implement local passwords or browser bearer-token handling.
+- Data belongs to the authenticated account. Ownership must be checked for all reads, writes, and related tags.
+- Follow-up dates are calendar days; optional times are interpreted in the user's browser timezone.
+- In-app reminders are checked while the app is open. Email and push delivery are future extensions, not simulated features.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+- Add, edit, delete, search, and organize contacts with tags and eight relationship statuses.
+- Schedule one-time or recurring follow-ups; complete them and optionally create the next reminder.
+- Record interaction history and track the most recent contact date.
+- Follow-up-first dashboard and in-app notification list.
+- Individual accounts with isolated persistent data, sign-up, sign-in, password reset, and logout.
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- Prioritize simplicity over adding too many features.
+- The first version should make the contact → reminder → interaction → completion → next follow-up workflow extremely easy and intuitive.
+- Modern, minimal, professional presentation with clear typography and plenty of whitespace.
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Run API codegen after every OpenAPI change.
+- Generated Zod response schemas coerce dates. Validate responses but send original calendar-date strings to avoid turning date-only values into timestamps.
 
 ## Pointers
 

@@ -356,6 +356,7 @@ components:
         notes: { type: string, default: "" }
         status: { $ref: "#/components/schemas/RelationshipStatus" }
         tagIds: { type: array, items: { type: integer } }
+        lastContactedAt: { type: ["string", "null"], format: date-time }
         nextFollowUpDate: { type: ["string", "null"], format: date }
         nextFollowUpTime: { type: ["string", "null"] }
         recurrenceDays: { type: ["integer", "null"], minimum: 1 }
@@ -373,6 +374,7 @@ components:
         notes: { type: string }
         status: { $ref: "#/components/schemas/RelationshipStatus" }
         tagIds: { type: array, items: { type: integer } }
+        lastContactedAt: { type: ["string", "null"], format: date-time }
         nextFollowUpDate: { type: ["string", "null"], format: date }
         nextFollowUpTime: { type: ["string", "null"] }
         recurrenceDays: { type: ["integer", "null"], minimum: 1 }

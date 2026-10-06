@@ -1,6 +1,6 @@
 kind = "web"
 previewPath = "/"
-title = "Relationship CRM"
+title = "Full Circle"
 description = "A simple, focused CRM for freelancers and small businesses to organize professional contacts, track follow-ups, and record relationship history."
 version = "1.0.0"
 id = "artifacts/relationship-crm"

@@ -160,6 +160,7 @@ export const CreateContactBody = zod.object({
   "notes": zod.string().default(createContactBodyNotesDefault),
   "status": zod.enum(['New Lead', 'Warm Lead', 'Active Contact', 'Client', 'Past Client', 'Networking Contact', 'Follow-Up Needed', 'Not a Fit']),
   "tagIds": zod.array(zod.number().int()).optional(),
+  "lastContactedAt": zod.coerce.date().nullish(),
   "nextFollowUpDate": zod.coerce.date().nullish(),
   "nextFollowUpTime": zod.string().nullish(),
   "recurrenceDays": zod.number().int().min(1).nullish()
@@ -270,6 +271,7 @@ export const UpdateContactBody = zod.object({
   "notes": zod.string().optional(),
   "status": zod.enum(['New Lead', 'Warm Lead', 'Active Contact', 'Client', 'Past Client', 'Networking Contact', 'Follow-Up Needed', 'Not a Fit']).optional(),
   "tagIds": zod.array(zod.number().int()).optional(),
+  "lastContactedAt": zod.coerce.date().nullish(),
   "nextFollowUpDate": zod.coerce.date().nullish(),
   "nextFollowUpTime": zod.string().nullish(),
   "recurrenceDays": zod.number().int().min(1).nullish()
