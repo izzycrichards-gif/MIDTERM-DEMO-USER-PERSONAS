@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/user-persona-maps/"
+title = "User Personas & Journey Maps"
+description = "A standalone UX research board defining the freelancer, artist, and music executive audiences for Full Circle, with three state-aware maps for account setup and adding contacts."
+version = "1.0.0"
+id = "artifacts/user-persona-maps"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/user-persona-maps/" ]
+localPort = 18851
+
+[services.development]
+run = "pnpm --filter @workspace/user-persona-maps run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/user-persona-maps", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/user-persona-maps/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18851"
+BASE_PATH = "/user-persona-maps/"
