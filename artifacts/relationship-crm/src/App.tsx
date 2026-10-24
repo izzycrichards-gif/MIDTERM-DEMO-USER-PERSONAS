@@ -16,6 +16,7 @@ import Contacts from "@/pages/contacts";
 import ContactDetail from "@/pages/contact-detail";
 import FollowUps from "@/pages/follow-ups";
 import Settings from "@/pages/settings";
+import DemoWorkspace from "@/demo/demo-workspace";
 
 const queryClient = new QueryClient();
 
@@ -28,10 +29,6 @@ const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 function stripBase(path: string): string {
   return basePath && path.startsWith(basePath) ? path.slice(basePath.length) || "/" : path;
-}
-
-if (!clerkPubKey) {
-  throw new Error("Missing VITE_CLERK_PUBLISHABLE_KEY in .env file");
 }
 
 const clerkAppearance = {
@@ -169,6 +166,9 @@ function Routes() {
 }
 
 function ClerkProviderWithRoutes() {
+  if (!clerkPubKey) {
+    throw new Error("Missing VITE_CLERK_PUBLISHABLE_KEY in .env file");
+  }
   const [, setLocation] = useLocation();
   return (
     <ClerkProvider
@@ -195,10 +195,42 @@ function ClerkProviderWithRoutes() {
   );
 }
 
+function AppEntry() {
+  const [location] = useLocation();
+  const isDemo = location === "/demo" || location.startsWith("/demo/");
+  const originalDocumentMeta = useRef({
+    title: document.title,
+    description: document.querySelector('meta[name="description"]')?.getAttribute("content"),
+    ogTitle: document.querySelector('meta[property="og:title"]')?.getAttribute("content"),
+  });
+  useEffect(() => {
+    if (!isDemo) {
+      document.title = originalDocumentMeta.current.title;
+      const description = document.querySelector('meta[name="description"]');
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      if (description && originalDocumentMeta.current.description !== null) {
+        description.setAttribute("content", originalDocumentMeta.current.description ?? "");
+      }
+      if (ogTitle && originalDocumentMeta.current.ogTitle !== null) {
+        ogTitle.setAttribute("content", originalDocumentMeta.current.ogTitle ?? "");
+      }
+      return;
+    }
+    document.title = "Sample workspace | Full Circle";
+    document.querySelector('meta[name="description"]')?.setAttribute(
+      "content",
+      "Explore Full Circle with a private, interactive sample workspace.",
+    );
+    document.querySelector('meta[property="og:title"]')?.setAttribute("content", "Sample workspace | Full Circle");
+  }, [isDemo]);
+  if (isDemo) return <DemoWorkspace />;
+  return <ClerkProviderWithRoutes />;
+}
+
 function App() {
   return (
     <WouterRouter base={basePath}>
-      <ClerkProviderWithRoutes />
+      <AppEntry />
     </WouterRouter>
   );
 }

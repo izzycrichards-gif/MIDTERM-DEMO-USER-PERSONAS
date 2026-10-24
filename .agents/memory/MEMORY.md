@@ -1,1 +1,2 @@
 - [Vite runtime caches](vite-runtime-caches.md) — installed package versions can be correct while optimized browser dependencies still contain an older runtime.
+- [Full Circle demo boundary](full-circle-demo-boundary.md) — keep the public sample workspace isolated from authentication and real CRM data.

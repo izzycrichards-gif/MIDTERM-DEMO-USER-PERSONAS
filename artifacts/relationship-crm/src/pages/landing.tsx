@@ -15,6 +15,7 @@ export default function Landing() {
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
         <Wordmark />
         <div className="flex items-center gap-2">
+          <Button variant="ghost" className="hidden sm:inline-flex" asChild><Link href="/demo/dashboard" data-testid="link-demo">Explore demo</Link></Button>
           <Button variant="ghost" asChild><Link href="/sign-in" data-testid="link-sign-in">Sign in</Link></Button>
           <Button asChild><Link href="/sign-up" data-testid="link-sign-up">Get started</Link></Button>
         </div>
@@ -28,6 +29,7 @@ export default function Landing() {
           <div className="rise rise-3 mt-9 flex flex-wrap gap-3">
             <Button size="lg" asChild><Link href="/sign-up" data-testid="link-hero-start" className="gap-2">Start for free <ArrowRight className="h-4 w-4" /></Link></Button>
             <Button size="lg" variant="outline" asChild><Link href="/sign-in">I have an account</Link></Button>
+            <Button size="lg" variant="ghost" asChild><Link href="/demo/dashboard">Explore demo</Link></Button>
           </div>
         </div>
 
