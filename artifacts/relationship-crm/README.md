@@ -1,6 +1,10 @@
 # Full Circle
 
-Full Circle is a relationship CRM for freelancers, artists, and small businesses. It helps users keep contact details and conversation context together, then see who is due for a follow-up.
+**Intended audience:** Freelancers, artists, and small businesses.
+
+**What it does:** Full Circle is a relationship CRM that keeps contact details and conversation context together, then shows who is due for a follow-up.
+
+**Live app:** [Open Full Circle](https://full-circle-izzycrichards.replit.app/)
 
 ## Features
 
